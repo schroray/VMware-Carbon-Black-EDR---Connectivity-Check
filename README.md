@@ -1,3 +1,3 @@
 # VMware Carbon Black EDR - Simple Endpoint Connectivity Check Page*
 Add a simple Status Page for CB EDR Master node - to allow the customer to test the initial connectivity to a EDR master...
-![Screenshot](screenshot.jpg)
+![Screenshot](/screenshot.png)
