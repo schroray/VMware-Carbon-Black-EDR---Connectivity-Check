@@ -1,0 +1,87 @@
+Add the page as part of the CB NGINX service configuration - allow access to the /test directory of the web service
+Customers will have the possibility to test the connection to the EDR Master Sensor Frontend: https://<edr-ip-or-fqdn>/test (or Backend: https://<edr-ip-or-fqdn>:8443/test)
+
+
+mkdir /var/www/cb/test
+ 
+cat > /var/www/cb/test/index.html << EOF
+<!DOCTYPE html>
+  <head>
+  <style>
+    body {
+      text-align: center;
+      padding: 40px 0;
+      background: #EBF0F5;
+    }
+    h1 {
+      color: #88B04B;
+      font-family: Arial, sans-serif;
+      font-weight: 900;
+      font-size: 40px;
+      margin-bottom: 10px;
+    }
+    p {
+      color: #404F5E;
+      font-family: Arial, sans-serif;
+      font-size:20px;
+      margin: 0;
+    }
+    .checkmark {
+      color: #9ABC66;
+      font-size: 100px;
+      line-height: 200px;
+      margin-left:-15px;
+    }
+    .card {
+      background: white;
+      padding: 60px;
+      border-radius: 4px;
+      box-shadow: 0 2px 3px #C8D0D8;
+      display: inline-block;
+      margin: 0 auto;
+    }
+    div.checkmark {
+      color: white;
+      background: #88B04B;
+      border-radius:200px;
+      height:200px;
+      width:200px;
+      margin:0 auto;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="checkmark">
+      <span>&#10003;</span>
+    </div>
+    <h1>Success</h1>
+    <p id="hostname"></p>
+    <p>Your endpoint is able to reach this service!</p>
+  </div>
+<script>
+  document.getElementById("hostname").innerHTML =
+  "<strong>" + window.location.href + "</strong>";
+</script>
+</body>
+</html>
+EOF
+ 
+ls -l /var/www/cb/
+ls -l /var/www/cb/test/
+ 
+chmod 755 -R /var/www/cb/test
+ 
+ls -l /var/www/cb/
+ls -l /var/www/cb/test/
+Add the test page to the CB server custom configuration: /etc/cb/nginx/conf.d/includes/cb.server.custom
+
+
+
+nano /etc/cb/nginx/conf.d/includes/cb.server.custom
+ 
+# Redirect requests to a test page
+location /test {
+        alias /var/www/cb/test;
+        try_files $uri $uri/ /index.html;
+}
